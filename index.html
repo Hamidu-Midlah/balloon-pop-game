@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Love Elements For You</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Dancing+Script:wght@700&display=swap');
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%),
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100"><path d="M50 20c-10 0-20 10-20 20 0 20 20 40 20 40s20-20 20-40c0-10-10-20-20-20z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: 100px 100px;
+            margin: 0;
+            overflow: hidden;
+            transition: background 0.5s ease;
+            cursor: url('path/to/heart-cursor.png'), auto;
+        }
+        .header {
+            font-family: 'Dancing Script', cursive;
+            font-size: 48px;
+            color: #d85c7f;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            text-align: center;
+            animation: heartbeat 1.5s infinite, fadeInDown 1s ease-out;
+        }
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .bouquet {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            animation: float 3s ease-in-out infinite;
+            padding: 20px;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        .element {
+            animation: bloom 1s ease-out forwards;
+            opacity: 0;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+            transition: transform 0.3s ease;
+            font-size: 60px;
+            cursor: pointer;
+            padding: 10px;
+        }
+        .element:hover {
+            transform: scale(1.2) rotate(10deg);
+        }
+        .element:nth-child(2) { animation-delay: 0.2s; }
+        .element:nth-child(3) { animation-delay: 0.4s; }
+        .element:nth-child(4) { animation-delay: 0.6s; }
+        .element:nth-child(5) { animation-delay: 0.8s; }
+        @keyframes bloom {
+            0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0); opacity: 1; }
+        }
+        .message {
+            position: absolute;
+            bottom: 20px;
+            font-family: 'Pacifico', cursive;
+            font-size: 24px;
+            color: #d85c7f;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 2s ease-out forwards;
+            opacity: 0;
+            text-align: center;
+            width: 100%;
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            font-family: 'Pacifico', cursive;
+            font-size: 24px;
+            text-align: center;
+            max-width: 80%;
+            backdrop-filter: blur(8px);
+            animation: slideIn 0.5s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translate(-50%, -60%); opacity: 0; }
+            to { transform: translate(-50%, -50%); opacity: 1; }
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            backdrop-filter: blur(3px);
+            animation: fadeIn 0.5s ease-out;
+        }
+        .date-picker {
+            margin-top: 20px;
+            font-size: 18px;
+            padding: 10px;
+            border-radius: 15px;
+            border: 2px solid #d85c7f;
+            font-family: 'Pacifico', cursive;
+            background: rgba(255, 255, 255, 0.9);
+            color: #d85c7f;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .date-picker:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .date-picker::-webkit-calendar-picker-indicator {
+            filter: invert(0.5) sepia(1) saturate(5) hue-rotate(300deg);
+            cursor: pointer;
+        }
+        #music-toggle, #voice-toggle, #close-modal {
+            padding: 12px 24px;
+            background: #d85c7f;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Pacifico', cursive;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        #music-toggle:hover, #voice-toggle:hover, #close-modal:hover {
+            transform: scale(1.05);
+            background: #c74b6d;
+        }
+        #music-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        #voice-toggle {
+            position: absolute;
+            top: 80px;
+            right: 20px;
+        }
+        #close-modal {
+            margin-top: 20px;
+        }
+        .floating-notes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .note {
+            position: absolute;
+            font-size: 24px;
+            animation: floatNote 10s linear infinite;
+        }
+        .note:nth-child(1) { left: 10%; animation-duration: 12s; }
+        .note:nth-child(2) { left: 30%; animation-duration: 15s; }
+        .note:nth-child(3) { left: 70%; animation-duration: 10s; }
+        @keyframes floatNote {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-20vh) rotate(360deg); }
+        }
+        #romantic-quote {
+            margin-top: 20px;
+            font-family: 'Pacifico', cursive;
+            font-size: 20px;
+            color: #d85c7f;
+        }
+        #countdown {
+            font-family: 'Pacifico', cursive;
+            font-size: 24px;
+            color: #d85c7f;
+            margin-top: 20px;
+        }
+
+        /* New styles for dropping animation */
+        .dropping-emoji {
+            position: absolute;
+            font-size: 24px;
+            animation: drop 2s linear infinite;
+        }
+        @keyframes drop {
+            0% { transform: translateY(-100vh) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+
+        /* New styles for the game tab and game elements */
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            font-family: 'Pacifico', cursive;
+            font-size: 20px;
+            color: #d85c7f;
+            border: 2px solid #d85c7f;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        .tab.active {
+            background: #d85c7f;
+            color: white;
+        }
+        .tab:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .game-container {
+            display: none;
+            position: relative;
+            width: 100%;
+            height: 60vh;
+            overflow: hidden;
+            background: black; /* Game background */
+        }
+        .balloon {
+            position: absolute;
+            font-size: 40px;
+            cursor: pointer;
+            animation: floatUp 5s linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh); }
+            100% { transform: translateY(-10vh); }
+        }
+        .score-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-family: 'Pacifico', cursive;
+            font-size: 18px; /* Reduced font size */
+            color: white; /* Game text color */
+        }
+        .timer-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-family: 'Pacifico', cursive;
+            font-size: 24px;
+            color: white; /* Game text color */
+        }
+        .level-container {
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            font-family: 'Pacifico', cursive;
+            font-size: 20px;
+            color: white; /* Game text color */
+        }
+        .toggle-container {
+            position: absolute;
+            top: 100px;
+            right: 20px;
+            font-family: 'Pacifico', cursive;
+            font-size: 18px;
+            color: white;
+        }
+        .toggle-container input[type="checkbox"] {
+            width: 40px;
+            height: 20px;
+            appearance: none;
+            background: #d85c7f;
+            border-radius: 10px;
+            position: relative;
+            cursor: pointer;
+        }
+        .toggle-container input[type="checkbox"]::before {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: 0.3s;
+        }
+        .toggle-container input[type="checkbox"]:checked::before {
+            left: 22px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                font-size: 36px;
+            }
+            .element {
+                font-size: 40px;
+            }
+            .message {
+                font-size: 18px;
+            }
+            #music-toggle, #voice-toggle {
+                font-size: 16px;
+                padding: 10px 20px;
+            }
+            .modal {
+                font-size: 20px;
+                padding: 20px;
+            }
+            .note {
+                font-size: 18px;
+            }
+            #romantic-quote {
+                font-size: 16px;
+            }
+            #countdown {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                font-size: 28px;
+            }
+            .element {
+                font-size: 30px;
+            }
+            .message {
+                font-size: 16px;
+            }
+            #music-toggle, #voice-toggle {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+            .modal {
+                font-size: 18px;
+                padding: 15px;
+            }
+            .note {
+                font-size: 16px;
+            }
+            #romantic-quote {
+                font-size: 14px;
+            }
+            #countdown {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="tab-container">
+        <div class="tab active" onclick="switchTab('love')">Love Mode</div>
+        <div class="tab" onclick="switchTab('game')">Balloon Pop Game</div>
+    </div>
+    <div class="header">I ❤️ You Gabrielle</div>
+    <div class="bouquet">
+        <div class="element">❤️</div>
+        <div class="element">💖</div>
+        <div class="element">💌</div>
+        <div class="element">💍</div>
+        <div class="element">💘</div>
+    </div>
+    <div class="message">With Love ❤️</div>
+    <div id="romantic-quote"></div>
+    <div id="countdown"></div>
+
+    <div class="floating-notes">
+        <div class="note">💌</div>
+        <div class="note">💌</div>
+        <div class="note">💌</div>
+    </div>
+
+    <!-- Balloon Pop Game Container -->
+    <div class="game-container" id="game-container">
+        <div class="score-container">
+            <span id="current-player">Gabrielle</span>: <span id="current-score">0</span>
+        </div>
+        <div class="timer-container">Time: <span id="timer">30</span>s</div>
+        <div class="level-container">Level: <span id="level">1</span></div>
+        <div class="toggle-container">
+            <input type="checkbox" id="toggle" onchange="toggleFirstPlayer()">
+        </div>
+    </div>
+
+    <!-- Soulful Melody -->
+    <audio id="music" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-memories.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <button id="music-toggle" aria-label="Toggle Music">
+        Play Music 🎵
+    </button>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="modal" id="modal">
+        <p id="modal-message">You are the most amazing person in my life! 💖</p>
+        <input type="date" class="date-picker" id="date-picker">
+        <button id="close-modal">Close with Love ❤️</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+        const elements = document.querySelectorAll('.element');
+        const body = document.body;
+        const colors = [
+            'linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%)',
+            'linear-gradient(45deg, #ff6f61 0%, #ffcccb 99%, #ffcccb 100%)',
+            'linear-gradient(45deg, #ffafbd 0%, #ffc3a0 99%, #ffc3a0 100%)',
+            'linear-gradient(45deg, #ff7e5f 0%, #feb47b 99%, #feb47b 100%)',
+            'linear-gradient(45deg, #d85c7f 0%, #f4a7b9 99%, #f4a7b9 100%)'
+        ];
+        const messages = [
+            "My heart beats only for you! ❤️",
+            "You are my shining star, my everything! 💖",
+            "Every love letter in the world couldn't express how much I care! 💌",
+            "Pick a special date for us 💋",
+            "Cupid's arrow struck me when I first saw you! 💘"
+        ];
+        const confettiColors = ['#ff9a9e', '#fad0c4', '#ff6f61', '#ffcccb', '#d85c7f'];
+        const quotes = [
+            "You are my today and all of my tomorrows. 💖",
+            "I have found the one whom my soul loves. 💌",
+            "In your arms is where I belong. 💘",
+            "Every moment with you is a moment I treasure. 💍",
+            "You are my sunshine on a cloudy day. 🌟"
+        ];
+        const quoteElement = document.getElementById('romantic-quote');
+        quoteElement.textContent = quotes[Math.floor(Math.random() * quotes.length)];
+
+        elements.forEach((element, index) => {
+            element.addEventListener('click', () => {
+                body.style.background = colors[index];
+                const end = Date.now() + (1 * 1000);
+                const confettiSettings = {
+                    particleCount: 3,
+                    startVelocity: 50,
+                    spread: 90,
+                    origin: { y: 0.6 },
+                    colors: confettiColors
+                };
+                const interval = setInterval(() => {
+                    if (Date.now() > end) return clearInterval(interval);
+                    confetti(confettiSettings);
+                }, 50);
+                document.getElementById('modal-message').textContent = messages[index];
+                document.getElementById('date-picker').style.display = index === 3 ? 'block' : 'none';
+                document.getElementById('modal').style.display = 'block';
+                document.getElementById('overlay').style.display = 'block';
+            });
+        });
+
+        document.getElementById('close-modal').addEventListener('click', () => {
+            document.getElementById('modal').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        });
+
+        const music = document.getElementById('music');
+        const musicToggle = document.getElementById('music-toggle');
+        let dropInterval;
+        let colorInterval;
+
+        musicToggle.addEventListener('click', () => {
+            if (music.paused) {
+                music.play();
+                musicToggle.textContent = 'Pause Music 🎵';
+                startDroppingEmojis();
+                startBackgroundColorChange();
+            } else {
+                music.pause();
+                musicToggle.textContent = 'Play Music 🎵';
+                stopDroppingEmojis();
+                stopBackgroundColorChange();
+            }
+        });
+
+        function startDroppingEmojis() {
+            const emojis = ['💐', '🌹', '💃🏾 🎶'];
+            dropInterval = setInterval(() => {
+                const emoji = document.createElement('div');
+                emoji.className = 'dropping-emoji';
+                emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                emoji.style.left = `${Math.random() * 100}%`;
+                emoji.style.fontSize = `${Math.random() * 24 + 24}px`;
+                document.body.appendChild(emoji);
+                setTimeout(() => {
+                    emoji.remove();
+                }, 2000);
+            }, 500);
+        }
+
+        function stopDroppingEmojis() {
+            clearInterval(dropInterval);
+            const droppingEmojis = document.querySelectorAll('.dropping-emoji');
+            droppingEmojis.forEach(emoji => emoji.remove());
+        }
+
+        function startBackgroundColorChange() {
+            colorInterval = setInterval(() => {
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                body.style.background = randomColor;
+            }, 1000); // Change color every second
+        }
+
+        function stopBackgroundColorChange() {
+            clearInterval(colorInterval);
+        }
+
+        const targetDate = new Date('2024-02-14T00:00:00'); // Replace with your special date
+        function updateCountdown() {
+            const now = new Date();
+            const diff = targetDate - now;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            document.getElementById('countdown').textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Game Logic
+        const gameContainer = document.getElementById('game-container');
+        const currentPlayerElement = document.getElementById('current-player');
+        const currentScoreElement = document.getElementById('current-score');
+        const timerElement = document.getElementById('timer');
+        const levelElement = document.getElementById('level');
+        const toggle = document.getElementById('toggle');
+
+        let gabrielleScore = 0;
+        let barrieScore = 0;
+        let timeLeft = 30;
+        let gameInterval;
+        let balloonInterval;
+        let round = 1;
+        let currentPlayer = 'Gabrielle'; // Default starting player
+        const balloonColors = ['red', 'blue', 'green', 'orange']; // Balloon colors
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            if (tab === 'love') {
+                document.querySelector('.tab-container .tab:nth-child(1)').classList.add('active');
+                document.querySelector('.bouquet').style.display = 'flex';
+                document.querySelector('.game-container').style.display = 'none';
+                stopGame();
+            } else {
+                document.querySelector('.tab-container .tab:nth-child(2)').classList.add('active');
+                document.querySelector('.bouquet').style.display = 'none';
+                document.querySelector('.game-container').style.display = 'block';
+                startGame();
+            }
+        }
+
+        function toggleFirstPlayer() {
+            currentPlayer = toggle.checked ? 'Barrie' : 'Gabrielle';
+            currentPlayerElement.textContent = currentPlayer;
+        }
+
+        function startGame() {
+            gabrielleScore = 0;
+            barrieScore = 0;
+            timeLeft = 30;
+            round = 1;
+            currentPlayer = toggle.checked ? 'Barrie' : 'Gabrielle';
+            currentPlayerElement.textContent = currentPlayer;
+            currentScoreElement.textContent = 0;
+            timerElement.textContent = timeLeft;
+            levelElement.textContent = round;
+            gameInterval = setInterval(updateTimer, 1000);
+            balloonInterval = setInterval(createBalloon, 1000 - round * 200); // Increase speed each round
+        }
+
+        function stopGame() {
+            clearInterval(gameInterval);
+            clearInterval(balloonInterval);
+            document.querySelectorAll('.balloon').forEach(balloon => balloon.remove());
+        }
+
+        function updateTimer() {
+            timeLeft--;
+            timerElement.textContent = timeLeft;
+            if (timeLeft <= 0) {
+                stopGame();
+                const winner = currentPlayer === 'Gabrielle' ? 'Gabrielle' : 'Barrie';
+                alert(`Round ${round} Over! ${winner} wins this round!`);
+                if (currentPlayer === 'Gabrielle') {
+                    gabrielleScore++;
+                } else {
+                    barrieScore++;
+                }
+                if (round < 3) {
+                    round++;
+                    levelElement.textContent = round;
+                    currentPlayer = currentPlayer === 'Gabrielle' ? 'Barrie' : 'Gabrielle';
+                    currentPlayerElement.textContent = currentPlayer;
+                    startGame();
+                } else {
+                    const finalWinner = gabrielleScore > barrieScore ? 'Gabrielle' : 'Barrie';
+                    alert(`Game Over! Final Winner: ${finalWinner} 🎉💋`);
+                }
+            }
+        }
+
+        function createBalloon() {
+            const balloon = document.createElement('div');
+            balloon.className = 'balloon';
+            balloon.textContent = '🎈';
+            balloon.style.left = `${Math.random() * 90}%`;
+            balloon.style.fontSize = `${Math.random() * 40 + 20}px`;
+            balloon.style.color = balloonColors[Math.floor(Math.random() * balloonColors.length)]; // Random color
+            balloon.addEventListener('click', () => {
+                balloon.remove();
+                if (currentPlayer === 'Gabrielle') {
+                    gabrielleScore++;
+                } else {
+                    barrieScore++;
+                }
+                currentScoreElement.textContent = currentPlayer === 'Gabrielle' ? gabrielleScore : barrieScore;
+                confetti({
+                    particleCount: 3,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            });
+            gameContainer.appendChild(balloon);
+            setTimeout(() => {
+                balloon.remove();
+            }, 5000);
+        }
+
+        // Initialize the Love Mode by default
+        switchTab('love');
+    </script>
+</body>
+</html>
